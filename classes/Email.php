@@ -29,13 +29,12 @@ class Email {
             $email->Username = $_ENV['EMAIL_USER'];
             $email->Password = $_ENV['EMAIL_PASS'];
         
-            //Recipients
-            $email->setFrom('info@uptask.com', 'Uptask');
-            $email->addAddress('juan@uptask.com', 'Juan Uptask');     //Add a recipient        
+            $email->setFrom('cuentas@uptask.com');
+            $email->addAddress($this->email);
+            $email->Subject = 'Confirma tu cuenta';
             //Content
             $email->isHTML(true);                                  //Set email format to HTML
             $email->CharSet = 'UTF-8';
-            $email->Subject = 'Confirma tu cuenta';
 
             $content = '<html>';
             $content .= "<p>Hola <strong>" . $this->nombre . "</strong> has creado tu cuenta en UpTask, solo debes confirmarla presionando el siguiente enlace</p>";
@@ -61,14 +60,15 @@ class Email {
             $email->Port = $_ENV['EMAIL_PORT'];
             $email->Username = $_ENV['EMAIL_USER'];
             $email->Password = $_ENV['EMAIL_PASS'];
-            
+
             //Recipients
-            $email->setFrom('info@uptask.com', 'Uptask');
-            $email->addAddress('juan@uptask.com', 'Juan Uptask');     //Add a recipient        
+            $email->setFrom('cuentas@uptask.com');
+            $email->addAddress($this->email);
+            $email->Subject = 'Reestablece tu password';
             //Content
             $email->isHTML(true);                                  //Set email format to HTML
             $email->CharSet = 'UTF-8';
-            $email->Subject = 'Confirma tu cuenta';
+
 
             $content = '<html>';
             $content .= "<p>Hola <strong>" . $this->nombre . "</strong>, has solicitado reestablecer tu password, sigue el siguiente enlace para hacerlo</p>";
