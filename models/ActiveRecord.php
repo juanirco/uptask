@@ -131,6 +131,13 @@ class ActiveRecord {
         return $resultado;
     }
 
+        // Eliminar un registro - Toma el ID de Active Record
+        public function eliminarAll() {
+            $query = "DELETE FROM "  . static::$tabla . " WHERE proyectoId = " . self::$db->escape_string($this->id);
+            $resultado = self::$db->query($query);
+            return $resultado;
+        }
+
     public static function consultarSQL($query) {
         // Consultar la base de datos
         $resultado = self::$db->query($query);

@@ -57,6 +57,14 @@
     </div>
     <ul id="listado-tareas" class="listado-tareas"></ul>
 
+    <div class="accionesProyecto">
+        <a class="editarProyecto" href="/actualizar-proyecto?id=<?php echo $proyecto->id; ?>">Editar Proyecto</a>
+        <form action="/eliminar-proyecto" method="POST">
+            <input type="hidden" name="id" value="<?php echo $proyecto->id; ?>">
+            <input type="submit" value="Eliminar Proyecto" class="eliminarProyecto">
+        </form>
+    </div>
+
 </div>
 <?php include_once __DIR__ . '/footer-dashboard.php';?>
 
@@ -64,5 +72,5 @@
     $script .= '
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="/build/js/tareas.js"></script>
-    '; 
+    '; // el primero va darnos acceso en consola a un objeto llamado Swal, puedes ir a consola y escribir swal y si se puede ver algo quiere decir que se instaló correctamente.
 ?>

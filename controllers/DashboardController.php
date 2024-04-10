@@ -2,9 +2,10 @@
 
 namespace Controllers;
 
-use Model\Proyecto;
-use Model\Usuario;
 use MVC\Router;
+use Model\Tarea;
+use Model\Usuario;
+use Model\Proyecto;
 
 class DashboardController {
     public static function index(Router $router) {
@@ -50,7 +51,8 @@ class DashboardController {
         }
         $router->render('dashboard/crear-proyecto', [
             'titulo' => 'Crear Proyecto',
-            'alertas' => $alertas
+            'alertas' => $alertas,
+            'proyecto' => $proyecto
         ]);
     }
 
@@ -67,23 +69,64 @@ class DashboardController {
         }
 
         $router->render('dashboard/proyecto', [
-            'titulo' => $proyecto->proyecto
+            'titulo' => $proyecto->proyecto,
+            'proyecto' => $proyecto
         ]);
     }
 
     public static function actualizar_proyecto(Router $router) {
         isSession();
         isAuth();
-
+        $token = $_GET['id'];
+        if(!$token) header('Location: /dashboard');
+        // Revisar que la persona que visita el proyecto, es quien lo creo
+        $proyecto = Proyecto::where('id', $token);
+        if($proyecto->propietarioId !== $_SESSION['id']) {
+            header('Location: /dashboard');
+        }
         $alertas = [];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $proyecto = new Proyecto();
+
+            if(!$proyecto || $proyecto->propietarioId !== $_SESSION['id']) {
+                Proyecto::setAlerta('error', 'No se puede completar la acción');
+                $alertas = $proyecto->getAlertas();
+            } else{
+                $proyecto->sincronizar($_POST);
+                $alertas = $proyecto->validarProyecto();
+    
+                if (empty($alertas)) {
+                    $resultado = $proyecto->existeProyecto();
+    
+                    if ($resultado->num_rows) {
+                        $alertas = Proyecto::getAlertas();
+                    } else {
+                        $proyecto->guardar();
+                        header('Location: /proyecto?id='.$proyecto->url);
+                    }
+                }
+            }
+
         }
         // debug($_SESSION);
         $router->render('dashboard/actualizar-proyecto', [
-            'titulo' => 'Crear Proyecto',
-            'alertas' => $alertas
+            'titulo' => 'Actualizar Proyecto',
+            'alertas' => $alertas,
+            'proyecto' => $proyecto
         ]);
+    }
+
+    public static function eliminar_proyecto(){
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            isSession();
+            isAuth();
+            $id = $_POST['id'];
+            $id = filter_var($id, FILTER_VALIDATE_INT);
+            $proyecto = Proyecto::find($id);
+            $tarea = new Tarea($_POST);
+            $tarea->eliminarAll();
+            header('Location: /dashboard');
+            $proyecto->eliminar();
+        }
     }
 
     public static function perfil(Router $router) {
