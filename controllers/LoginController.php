@@ -23,8 +23,8 @@ class LoginController {
                     // El Usuario existe
                     if( password_verify($_POST['password'], $usuario->password) ) {
                         
-                        // Iniciar la sesión
-                        session_start();    
+                        // Iniciar la sesión 
+                        isSession();
                         $_SESSION['id'] = $usuario->id;
                         $_SESSION['nombre'] = $usuario->nombre;
                         $_SESSION['email'] = $usuario->email;
@@ -50,7 +50,7 @@ class LoginController {
     }
 
     public static function logout(Router $router) {
-        session_start();
+        isSession();
         $_SESSION = [];
         header('Location: /');
     }

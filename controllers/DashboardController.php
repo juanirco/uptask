@@ -146,7 +146,7 @@ class DashboardController {
     
 
     public static function perfil(Router $router) {
-        session_start();
+        isSession();
         isAuth();
         $alertas = [];
 
@@ -187,7 +187,7 @@ class DashboardController {
         ]);
     }
     public static function cambiar_password(Router $router) {
-        session_start();
+        isSession();
         isAuth();
         $alertas = [];
 

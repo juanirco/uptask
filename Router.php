@@ -19,24 +19,32 @@ class Router
 
     public function comprobarRutas()
     {
-
+        // Verificar sesión y tiempo de inactividad aquí
+        session_start();
+        $inactivity_timeout = 3600; // Tiempo de inactividad en segundos (60 minutos)
+        if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > $inactivity_timeout)) {
+            // Si ha pasado el tiempo de inactividad, destruir la sesión
+            $_SESSION = [];
+        }
+        $_SESSION['LAST_ACTIVITY'] = time(); // Actualizar el tiempo de última actividad
+    
         $currentUrl = strtok($_SERVER['REQUEST_URI'], '?') ?? '/';
         $method = $_SERVER['REQUEST_METHOD'];
-
+    
         if ($method === 'GET') {
             $fn = $this->getRoutes[$currentUrl] ?? null;
         } else {
             $fn = $this->postRoutes[$currentUrl] ?? null;
         }
-
-
-        if ( $fn ) {
+    
+        if ($fn) {
             // Call user fn va a llamar una función cuando no sabemos cual sera
             call_user_func($fn, $this); // This es para pasar argumentos
         } else {
             echo "Página No Encontrada o Ruta no válida";
         }
     }
+    
 
     public function render($view, $datos = [])
     {
