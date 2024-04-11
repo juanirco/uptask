@@ -2,4 +2,7 @@ node_modules
 vendor
 .DS_Store
 includes/.env
+package-lock.jsonn
+composer.lock
+gulpfile.js
 src

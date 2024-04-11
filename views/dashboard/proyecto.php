@@ -60,8 +60,9 @@
     <div class="accionesProyecto">
         <a class="editarProyecto" href="/actualizar-proyecto?id=<?php echo $proyecto->id; ?>">Editar Proyecto</a>
         <form action="/eliminar-proyecto" method="POST">
-            <input type="hidden" name="id" value="<?php echo $proyecto->id; ?>">
-            <input type="submit" value="Eliminar Proyecto" class="eliminarProyecto">
+            <input type="hidden" name="idProyecto" value="<?php echo $proyecto->id; ?>">
+            <button type="button" class="eliminarProyecto" onclick="confirmarEliminarProyecto()">Eliminar Proyecto</button>
+
         </form>
     </div>
 

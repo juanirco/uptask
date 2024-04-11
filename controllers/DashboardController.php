@@ -115,19 +115,35 @@ class DashboardController {
         ]);
     }
 
-    public static function eliminar_proyecto(){
+    public static function eliminar_proyecto() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             isSession();
             isAuth();
             $id = $_POST['id'];
             $id = filter_var($id, FILTER_VALIDATE_INT);
             $proyecto = Proyecto::find($id);
+            if (!$proyecto) {
+                // Proyecto no encontrado
+                // Puedes retornar un mensaje de error JSON o redirigir a alguna página de error
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'message' => 'El proyecto no fue encontrado']);
+                exit;
+            }
+    
+            // Aquí podrías incluir lógica adicional, como verificar si el usuario tiene permisos para eliminar el proyecto, etc.
+    
             $tarea = new Tarea($_POST);
             $tarea->eliminarAll();
-            header('Location: /dashboard');
             $proyecto->eliminar();
+            
+            // Envía una respuesta JSON indicando que el proyecto ha sido eliminado correctamente
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true, 'message' => 'El proyecto ha sido eliminado correctamente']);
+            exit;
+
         }
     }
+    
 
     public static function perfil(Router $router) {
         session_start();

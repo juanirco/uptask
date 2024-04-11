@@ -28,7 +28,7 @@ class Proyecto extends ActiveRecord {
 
     public function existeProyecto() {
         $query = " SELECT * FROM " . self::$tabla . " WHERE proyecto = '" . 
-        $this->proyecto . "' AND propietarioId = '" . $this->propietarioId . "' LIMIT 1";
+        $this->proyecto . "' AND propietarioId = '" . $_SESSION['id'] . "' LIMIT 1";
 
         $resultado = self::$db->query($query);
 

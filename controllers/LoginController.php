@@ -11,24 +11,30 @@ class LoginController {
         avoidDoubleLogin();
         $alertas = [];
 
-        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
             $usuario = new Usuario($_POST);
             $alertas = $usuario->validarLogin();
-
             if(empty($alertas)) {
+                // Verificar quel el usuario exista
                 $usuario = Usuario::where('email', $usuario->email);
-                if($usuario) {
-                    if($usuario->comprobarPasswordAndVerificado($usuario->password)) {
-                        session_start();
+                if(!$usuario || !$usuario->confirmado ) {
+                    Usuario::setAlerta('error', 'El Usuario No Existe o no esta confirmado');
+                } else {
+                    // El Usuario existe
+                    if( password_verify($_POST['password'], $usuario->password) ) {
+                        
+                        // Iniciar la sesión
+                        session_start();    
                         $_SESSION['id'] = $usuario->id;
                         $_SESSION['nombre'] = $usuario->nombre;
                         $_SESSION['email'] = $usuario->email;
                         $_SESSION['login'] = true;
 
+                        // Redireccionar
                         header('Location: /dashboard');
+                    } else {
+                        Usuario::setAlerta('error', 'Password Incorrecto');
                     }
-                } else{
-                    Usuario::setAlerta('error', 'Usuario no encontrado');
                 }
             }
         }
