@@ -37,7 +37,7 @@ class Email {
             $email->CharSet = 'UTF-8';
 
             $content = '<html>';
-            $content .= "<p>Hola <strong>" . $this->nombre . "</strong> has creado tu cuenta en UpTask, solo debes confirmarla presionando el siguiente enlace</p>";
+            $content = "<p>Hola <strong>" . $this->nombre . "</strong> has creado tu cuenta en UpTask, solo debes confirmarla presionando el siguiente enlace</p>";
             $content .= "<p>Presiona aquí: <a href='" . $_ENV['APP_URL'] . "/confirmar?token=" . $this->token . "'>Confirmar Cuenta</a> </p>";
             $content .= "<p> Si tu no solicitaste esta cuenta, puedes ignorar el mensaje";
             $content .= '</html>';
@@ -71,7 +71,7 @@ class Email {
 
 
             $content = '<html>';
-            $content .= "<p>Hola <strong>" . $this->nombre . "</strong>, has solicitado reestablecer tu password, sigue el siguiente enlace para hacerlo</p>";
+            $content = "<p>Hola <strong>" . $this->nombre . "</strong>, has solicitado reestablecer tu password, sigue el siguiente enlace para hacerlo</p>";
             $content .= "<p>Presiona aquí: <a href='" . $_ENV['APP_URL'] . "/reestablecer?token=" . $this->token . "'>Reestablecer Password</a> </p>";
             $content .= "<p> Si tu no solicitaste esta cuenta, puedes ignorar el mensaje";
             $content .= '</html>';
